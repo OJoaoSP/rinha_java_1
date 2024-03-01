@@ -1,8 +1,8 @@
-package rinha.rinha.dto;
+package rinha.rinha.model;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
-
+import rinha.rinha.dto.TransacaoDTO;
 import java.sql.Timestamp;
 
 @Entity(name = "transacoes")
@@ -12,13 +12,14 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
-    private Integer ClienteId;
-    private Integer Valor;
-    private String Tipo;
-    private String Descricao;
-    private Timestamp RealizadaEm;
+    public Integer ClienteId;
+    public Integer Valor;
+    public String Tipo;
+    public String Descricao;
+    public Timestamp RealizadaEm;
 
     public Transacao(TransacaoDTO dado, Integer id) {
+
         ClienteId = id;
         Valor = dado.valor();
         Tipo = dado.tipo();
