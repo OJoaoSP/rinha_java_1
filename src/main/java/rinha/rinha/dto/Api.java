@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import rinha.rinha.Repository.ClienteRepository;
 import rinha.rinha.Repository.TransacaoRepository;
 import rinha.rinha.model.Cliente;
+import rinha.rinha.model.Transacao;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,18 +32,24 @@ public class Api {
         if (!c.AplicaValor(dado) ) {
             return ResponseEntity.unprocessableEntity().build();
         }
-
-
         Transacao t = new Transacao(dado, id);
-
-
         repositoryT.save(t);
-        return  ResponseEntity.ok().build();
+        return  ResponseEntity
+                .ok().build();
     }
     @GetMapping("/{id}/extratos")
-    public void Extrato(@PathVariable Integer id){
+    public ResponseEntity Extrato(@PathVariable Integer id){
+        Optional<Cliente> pre_cliente = repositoryS.findById(id);
+        if (pre_cliente.isEmpty()){
+            return  ResponseEntity.notFound().build();
+        }
+        var c = pre_cliente.get();
 
+        List<Transacao> t = repositoryT.findByClienteId(id);
+        var b = t.stream().map(TransacaoDTO::new).toList();
+        System.out.println(b);
 
+        return ResponseEntity.ok(new ExtratoDTO(new ClienteExtratoDTO(c), b));
 
     }
 
