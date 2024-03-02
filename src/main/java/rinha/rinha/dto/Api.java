@@ -10,10 +10,8 @@ import rinha.rinha.Repository.TransacaoRepository;
 import rinha.rinha.model.Cliente;
 import rinha.rinha.model.Transacao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("clientes")
@@ -48,9 +46,10 @@ public class Api {
         var c = pre_cliente.get();
 
         List<Transacao> t = repositoryT.findByClienteId(id);
-        var b = t.stream().map( ft -> new TransacaoDTO(ft));
+        var b = t.stream().map(TransacaoDTO::new).toList();
+        System.out.println(b);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ExtratoDTO(new ClienteExtratoDTO(c), b));
 
     }
 
