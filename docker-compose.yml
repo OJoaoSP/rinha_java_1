@@ -3,15 +3,13 @@ version: '3.5'
 services:
   api:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./:/app
     environment:
-      - DB_HOST=mysql_1_F
-      - DB_PORT=3307
+      - DB_HOST=localhost
+      - DB_PORT=3306
       - DB_USERNAME=root
       - DB_PASSWORD=Spacekl3
       - DEBUG=true
