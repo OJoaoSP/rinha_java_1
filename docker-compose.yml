@@ -9,19 +9,20 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_HOST=localhost
+      - DB_HOST=db
       - DB_PORT=3307
       - DB_USERNAME=root
       - DB_PASSWORD=rinhasenha
     depends_on:
-      - mysql
+      - db
 
-  mysql:
+  db:
     image: "mysql:8.0"
-    container_name: "mysql_1_F"
+    hostname: db
     ports:
       - "3307:3307"
     environment:
+      - DB_HOSTNAME=db
       - MYSQL_ROOT_PASSWORD=rinhasenha
       - MYSQL_DATABASE=rinha
     deploy:
