@@ -8,29 +8,38 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - rinha
     environment:
-      - DB_HOST=db
-      - DB_PORT=3307
+      - DB_HOST=mysql
+      - DB_PORT=3306
       - DB_USERNAME=root
       - DB_PASSWORD=rinhasenha
     depends_on:
-      - db
+      mysql:
+        condition: service_healthy
 
-  db:
+  mysql:
     image: "mysql:8.0"
-    hostname: db
+    networks:
+      - rinha
     ports:
-      - "3307:3307"
+      - "3306:3306"
     environment:
-      - DB_HOSTNAME=db
       - MYSQL_ROOT_PASSWORD=rinhasenha
       - MYSQL_DATABASE=rinha
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
     deploy:
       resources:
         limits:
           cpus: "1"
           memory: "200MB"
+
 networks:
-  default:
+  rinha:
     driver: bridge
-    name: rinha-nginx-2024q1
